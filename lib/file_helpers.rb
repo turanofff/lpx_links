@@ -35,14 +35,6 @@ module FileHelpers
       .gsub("./", "").chomp
   end
 
-  def temp_dir
-    File.join(File.dirname(__FILE__), "/tmp")
-  end
-
-  def tmp_json
-    @tmp_json ||= File.expand_path("tmp", "lgp_content.json")
-  end
-
   def links_dir
     @links_dir ||= File.join(ENV["HOME"], "Desktop/lpx_download_links")
   end
@@ -57,10 +49,6 @@ module FileHelpers
 
   def json_file
     File.join(json_dir, "logicpro_content.json")
-  end
-
-  def json_dir
-    File.join(links_dir, "json")
   end
 
   def url

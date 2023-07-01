@@ -30,10 +30,8 @@ module LpxLinks
 
   def run
     create_dirs
-    convert_plist_to_json
     print_file(FileHelpers.all_download_links, download_links)
     print_file(FileHelpers.mandatory_download_links, download_links(true))
-    print_file(FileHelpers.json_file, JSON.pretty_generate(packages))
     open_lpx_download_links
   end
 
@@ -43,19 +41,14 @@ module LpxLinks
 
   def create_dirs
     FileUtils.mkdir_p(FileHelpers.links_dir)
-    FileUtils.mkdir_p(FileHelpers.json_dir)
   end
 
-  def convert_plist_to_json
-    `plutil -convert json \'#{FileHelpers.plist_file_path($app_name)}\' -o /tmp/lgp_content.json`
+  def read_plist_packages_to_json
+    JSON.parse(`plutil -extract Packages json \'#{FileHelpers.plist_file_path($app_name)}\' -o -`)
   end
 
   def packages
-    @packages ||= read_packages
-  end
-
-  def read_packages
-    JSON.parse(File.read("/tmp/lgp_content.json"))["Packages"]
+    @packages ||= read_plist_packages_to_json
   end
 
   def download_links(only_mandatory = false)
